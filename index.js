@@ -15,11 +15,15 @@ cells.forEach(cell => {
       }
     }
     count++;
-    determineWinner();
+    setTimeout(() => {
+      determineWinner();
+    }, 300);
   });
 });
+
 function determineWinner() {
-  console.log("determineWinner called!");
+  console.log("arr is: ", arr);
+  let displayWinner = document.querySelector(".win-message");
   let winningCombination = [
     ["0", "1", "2"],
     ["3", "4", "5"],
@@ -30,16 +34,29 @@ function determineWinner() {
     ["0", "4", "8"],
     ["3", "4", "7"]
   ];
+  function checkTie(element) {
+    return element === "o" || element === "x";
+  }
+  console.log("every array is checked: ", arr.every(checkTie));
+  if (arr.every(checkTie)) {
+    alert("done!");
+  }
   winningCombination.forEach(combination => {
-    console.log("cell[0] is: ", cells[0].textContent);
     if (
       cells[Number(combination[0])].textContent === "x" &&
       cells[Number(combination[1])].textContent === "x" &&
       cells[Number(combination[2])].textContent === "x"
     ) {
-      alert("You won!");
+      displayWinner.style.display = "block";
+      displayWinner.style.color = "blue";
+    } else if (
+      cells[Number(combination[0])].textContent === "o" &&
+      cells[Number(combination[1])].textContent === "o" &&
+      cells[Number(combination[2])].textContent === "o"
+    ) {
+      displayWinner.style.display = "block";
+      displayWinner.style.color = "red";
+      displayWinner.textContent = "Player 2 Wins!";
     }
   });
 }
-
-console.log("arr is: ", arr);
