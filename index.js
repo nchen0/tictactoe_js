@@ -9,24 +9,28 @@ function playGame() {
   let count = 0;
   cells.forEach(cell => {
     cell.addEventListener("click", () => {
-      console.log("arr is: ", arr);
-      if (count % 2 === 0) {
-        //arr[Number(cell.getAttribute("dataset"))] = "x";
-        //console.log(arr[Number(cell.getAttribute("dataset"))]);
-        if (arr[Number(cell.getAttribute("dataset"))] === "") {
-          arr[Number(cell.getAttribute("dataset"))] = "x";
-          cell.textContent = "x";
+      if (
+        displayWinner.textContent !== "Player 1 Wins!" &&
+        displayWinner.textContent !== "Player 2 Wins!"
+      ) {
+        if (count % 2 === 0) {
+          //arr[Number(cell.getAttribute("dataset"))] = "x";
+          //console.log(arr[Number(cell.getAttribute("dataset"))]);
+          if (arr[Number(cell.getAttribute("dataset"))] === "") {
+            arr[Number(cell.getAttribute("dataset"))] = "x";
+            cell.textContent = "x";
+          }
+        } else {
+          if (arr[Number(cell.getAttribute("dataset"))] === "") {
+            arr[Number(cell.getAttribute("dataset"))] = "o";
+            cell.textContent = "o";
+          }
         }
-      } else {
-        if (arr[Number(cell.getAttribute("dataset"))] === "") {
-          arr[Number(cell.getAttribute("dataset"))] = "o";
-          cell.textContent = "o";
-        }
+        count++;
+        setTimeout(() => {
+          determineWinner();
+        }, 150);
       }
-      count++;
-      setTimeout(() => {
-        determineWinner();
-      }, 150);
     });
   });
   newGameButton.addEventListener("click", () => {
@@ -49,7 +53,7 @@ function determineWinner() {
     ["1", "4", "7"],
     ["2", "5", "8"],
     ["0", "4", "8"],
-    ["3", "4", "7"]
+    ["2", "4", "6"]
   ];
 
   winningCombination.forEach(combination => {
