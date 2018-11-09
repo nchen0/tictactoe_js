@@ -1,32 +1,46 @@
-let count = 0;
 let arr = ["", "", "", "", "", "", "", "", ""];
 let cells = document.querySelectorAll(".grid");
-cells.forEach(cell => {
-  cell.addEventListener("click", () => {
-    console.log("Number(cell.getAttribute) is: ", cell.getAttribute("dataset"));
-    if (count % 2 === 0) {
-      //arr[Number(cell.getAttribute("dataset"))] = "x";
-      //console.log(arr[Number(cell.getAttribute("dataset"))]);
-      if (arr[Number(cell.getAttribute("dataset"))] === "") {
-        arr[Number(cell.getAttribute("dataset"))] = "x";
-        cell.textContent = "x";
+let board = document.querySelector(".board");
+let displayWinner = document.querySelector(".win-message");
+board.addEventListener("click", playGame());
+
+function playGame() {
+  let newGameButton = document.querySelector(".newButton");
+  let count = 0;
+  cells.forEach(cell => {
+    cell.addEventListener("click", () => {
+      console.log("arr is: ", arr);
+      if (count % 2 === 0) {
+        //arr[Number(cell.getAttribute("dataset"))] = "x";
+        //console.log(arr[Number(cell.getAttribute("dataset"))]);
+        if (arr[Number(cell.getAttribute("dataset"))] === "") {
+          arr[Number(cell.getAttribute("dataset"))] = "x";
+          cell.textContent = "x";
+        }
+      } else {
+        if (arr[Number(cell.getAttribute("dataset"))] === "") {
+          arr[Number(cell.getAttribute("dataset"))] = "o";
+          cell.textContent = "o";
+        }
       }
-    } else {
-      if (arr[Number(cell.getAttribute("dataset"))] === "") {
-        arr[Number(cell.getAttribute("dataset"))] = "o";
-        cell.textContent = "o";
-      }
-    }
-    count++;
-    setTimeout(() => {
-      determineWinner();
-    }, 300);
+      count++;
+      setTimeout(() => {
+        determineWinner();
+      }, 150);
+    });
   });
-});
+  newGameButton.addEventListener("click", () => {
+    cells.forEach(cell => {
+      cell.textContent = "";
+    });
+    displayWinner.textContent = "nothing";
+    displayWinner.style.visibility = "hidden";
+    arr = ["", "", "", "", "", "", "", "", ""];
+    count = 0;
+  });
+}
 
 function determineWinner() {
-  console.log("arr is: ", arr);
-  let displayWinner = document.querySelector(".win-message");
   let winningCombination = [
     ["0", "1", "2"],
     ["3", "4", "5"],
@@ -37,15 +51,7 @@ function determineWinner() {
     ["0", "4", "8"],
     ["3", "4", "7"]
   ];
-  function checkTie(element) {
-    return element === "o" || element === "x";
-  }
-  console.log("every array is checked: ", arr.every(checkTie));
-  if (arr.every(checkTie)) {
-    displayWinner.style.visibility = "visible";
-    displayWinner.style.color = "green";
-    displayWinner.textContent = "Tie! Play again?";
-  }
+
   winningCombination.forEach(combination => {
     if (
       cells[Number(combination[0])].textContent === "x" &&
@@ -54,6 +60,7 @@ function determineWinner() {
     ) {
       displayWinner.style.visibility = "visible";
       displayWinner.style.color = "blue";
+      displayWinner.textContent = "Player 1 Wins!";
     } else if (
       cells[Number(combination[0])].textContent === "o" &&
       cells[Number(combination[1])].textContent === "o" &&
@@ -64,4 +71,18 @@ function determineWinner() {
       displayWinner.textContent = "Player 2 Wins!";
     }
   });
+  if (
+    displayWinner.textContent !== "Player 1 Wins!" &&
+    displayWinner.textContent !== "Player 2 Wins!"
+  ) {
+    if (arr.every(checkTie)) {
+      displayWinner.style.visibility = "visible";
+      displayWinner.style.color = "green";
+      displayWinner.textContent = "Tie! Play again?";
+    }
+  }
+}
+
+function checkTie(element) {
+  return element === "o" || element === "x";
 }
