@@ -3,14 +3,17 @@ let arr = ["", "", "", "", "", "", "", "", ""];
 let cells = document.querySelectorAll(".grid");
 cells.forEach(cell => {
   cell.addEventListener("click", () => {
+    console.log("Number(cell.getAttribute) is: ", cell.getAttribute("dataset"));
     if (count % 2 === 0) {
       //arr[Number(cell.getAttribute("dataset"))] = "x";
       //console.log(arr[Number(cell.getAttribute("dataset"))]);
-      if (arr[Number(cell.textContent)] === "") {
+      if (arr[Number(cell.getAttribute("dataset"))] === "") {
+        arr[Number(cell.getAttribute("dataset"))] = "x";
         cell.textContent = "x";
       }
     } else {
-      if (arr[Number(cell.textContent)] === "") {
+      if (arr[Number(cell.getAttribute("dataset"))] === "") {
+        arr[Number(cell.getAttribute("dataset"))] = "o";
         cell.textContent = "o";
       }
     }
@@ -39,7 +42,9 @@ function determineWinner() {
   }
   console.log("every array is checked: ", arr.every(checkTie));
   if (arr.every(checkTie)) {
-    alert("done!");
+    displayWinner.style.visibility = "visible";
+    displayWinner.style.color = "green";
+    displayWinner.textContent = "Tie! Play again?";
   }
   winningCombination.forEach(combination => {
     if (
@@ -47,14 +52,14 @@ function determineWinner() {
       cells[Number(combination[1])].textContent === "x" &&
       cells[Number(combination[2])].textContent === "x"
     ) {
-      displayWinner.style.display = "block";
+      displayWinner.style.visibility = "visible";
       displayWinner.style.color = "blue";
     } else if (
       cells[Number(combination[0])].textContent === "o" &&
       cells[Number(combination[1])].textContent === "o" &&
       cells[Number(combination[2])].textContent === "o"
     ) {
-      displayWinner.style.display = "block";
+      displayWinner.style.visibility = "visible";
       displayWinner.style.color = "red";
       displayWinner.textContent = "Player 2 Wins!";
     }
